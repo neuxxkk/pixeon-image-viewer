@@ -53,8 +53,8 @@ pixeon-image-viewer/
 
 - [X] Instalar Qt 6 + Qt Creator (ou usar VSCode com extensão Qt)
 - [X] Criar projeto CMake com estrutura de pastas acima
-- [ ] Configurar `CMakeLists.txt` com target principal + target de testes
-- [ ] Inicializar repositório Git com `.gitignore` adequado para Qt/CMake
+- [X] Configurar `CMakeLists.txt` com target principal + target de testes
+- [X] Inicializar repositório Git com `.gitignore` adequado para Qt/CMake
 - [ ] Criar `README.md` inicial com instruções de build
 
 ---
