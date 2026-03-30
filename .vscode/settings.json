@@ -1,0 +1,12 @@
+{
+    //"C_Cpp.errorSquiggles": "enabled",
+
+    // Added by me
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.generator": "Unix Makefiles",
+    "cmake.buildBeforeRun": true,
+    "cmake.debugConfig": {
+        "request": "launch",
+        "type": "cppdbg"
+    }
+}

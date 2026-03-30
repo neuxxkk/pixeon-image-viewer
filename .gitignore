@@ -1,0 +1,7 @@
+build/
+.cache/
+*.user
+*.autosave
+moc_*
+qrc_*
+ui_*

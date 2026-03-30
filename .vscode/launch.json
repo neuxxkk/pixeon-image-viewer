@@ -1,0 +1,55 @@
+{
+    "configurations": [
+        /*{
+            "name": "C/C++: g++ build and debug active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "C/C++: g++ build active file",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "visualizerFile": "/home/vitornms/.config/Code/User/workspaceStorage/0333ca4b5f0cb98f4e127a9d34b1bcac/tonka3000.qtvsctools/qt.natvis.xml"
+        },*/
+
+        // Added by me
+        {
+            "name": "Run PixeonImageViewer",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/src/PixeonImageViewer",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "CMake Build",
+            "visualizerFile": "/home/vitornms/.config/Code/User/workspaceStorage/0333ca4b5f0cb98f4e127a9d34b1bcac/tonka3000.qtvsctools/qt.natvis.xml"
+        }
+    ],
+    "version": "2.0.0"
+}
