@@ -2,6 +2,10 @@ set(SOURCES
     main.cpp
     view/MainWindow.h
     view/MainWindow.cpp
+    view/ImageViewWidget.h
+    view/ImageViewWidget.cpp
+    model/ImageModel.h
+    model/ImageModel.cpp
 )
 
 

@@ -63,10 +63,10 @@ pixeon-image-viewer/
 
 Este é o requisito mais importante segundo o enunciado: *"a imagem aberta deve ser apresentada na aplicação, essa imagem é parte mais importante dela"*.
 
-- [ ] Implementar `ImageModel` para encapsular estado da imagem atual
-- [ ] Implementar `MainWindow` com menu `File > Open` usando `QFileDialog`
-- [ ] Implementar `ImageViewWidget` herdando de `QWidget` com `paintEvent` customizado
-- [ ] Suportar BMP, PNG e JPEG no filtro do `QFileDialog`
+- [X] Implementar `ImageModel` para encapsular estado da imagem atual
+- [X] Implementar `MainWindow` com menu `File > Open` usando `QFileDialog`
+- [X] Implementar `ImageViewWidget` herdando de `QWidget` com `paintEvent` customizado
+- [X] Suportar BMP, PNG e JPEG no filtro do `QFileDialog`
 
 ```cpp
 // model/ImageModel.h
