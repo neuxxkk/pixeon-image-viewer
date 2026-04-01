@@ -41,7 +41,7 @@ void ImageViewWidget::paintEvent(QPaintEvent*) {
         // Converte coordenadas de IMAGEM para WIDGET para desenhar o overlay fixo na imagem
         // (Isso garante que a linha "grude" na imagem ao dar pan/zoom)
         auto mapToWidget = [&](const QPointF& imgPos) {
-            return center + m_panOffset + imgPos * m_zoomFactor;
+            return center + m_panOffset + imgPos * m_zoomFactor; // aplica zoom e pan para converter de coordenadas de imagem para widget
         };
 
         QPointF p1 = mapToWidget(m_measureStart);
@@ -57,11 +57,12 @@ void ImageViewWidget::paintEvent(QPaintEvent*) {
         painter.drawEllipse(p1, 3, 3);
         painter.drawEllipse(p2, 3, 3);
 
-        // Calcula distância em pixels (simulando mm para o contexto médico)
-        double dist = std::sqrt(std::pow(m_measureEnd.x() - m_measureStart.x(), 2) + 
-                                std::pow(m_measureEnd.y() - m_measureStart.y(), 2));
-        
-        QString text = QString("%1 px").arg(dist, 0, 'f', 1);
+        // Calcula distância (simulando calibração médica: 0.1mm por pixel)
+        const double pixelDist = std::sqrt(std::pow(m_measureEnd.x() - m_measureStart.x(), 2) + 
+                                           std::pow(m_measureEnd.y() - m_measureStart.y(), 2));
+        const double mmDist = pixelDist * 0.1; // Simulação de calibração DICOM
+
+        QString text = QString("%1 mm").arg(mmDist, 0, 'f', 2);
         
         // Desenha fundo do texto para legibilidade
         painter.setBrush(Qt::black);
