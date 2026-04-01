@@ -2,6 +2,8 @@
 #include <QMainWindow>
 #include <memory> // std::unique_ptr
 #include "../model/ImageModel.h"
+#include "../model/ImageCollection.h"
+#include <QListWidget>
 
 class ImageViewWidget;
 class QSlider;
@@ -18,22 +20,26 @@ private slots:
     // Slots são métodos chamados em resposta a signals
     // Convenção Qt: prefixo "on" + nome do sinal
     void onOpenFile();
+    void onSaveFile(); // opcional, não implementado
     void onBrightnessChanged(int value);
     void onContrastChanged(int value);
+    void onImageSelected(int row);
 
 private:
-    void setupUi(); //Monta widgets
+    void setupUi(); //Monta widgets e conections
     void setupMenus(); // Monta menu   
-    void updateControls(); //habilita caso imagem carregada, desabilita caso contrário
+    void reprocessImage(); // Reprocessa a imagem atual com os ajustes do Model
+    void updateControls(); // Habilita caso imagem carregada, desabilita caso contrário  
 
-    // Ponteiros inteligentes para gerenciamento automático de memória
-    // MainWindow é dono do modelo e da view, então usamos unique_ptr
-    std::unique_ptr<ImageModel> m_model; // Gerencia a imagem e ajustes
+    ImageCollection  m_collection;  // valor, não ponteiro — ela é simples o suficiente
+    QListWidget*     m_imageList{nullptr};
 
     ImageViewWidget*    m_imageView{nullptr}; // Widget para exibir a imagem
-    QSlider*            m_brightnessSlider{nullptr}; // Slider para ajuste de brilho
-    QSlider*            m_contrastSlider{nullptr}; // Slider para ajuste de contraste
-    QLabel*             m_brightnessLabel{nullptr}; // Label para mostrar valor do brilho
-    QLabel*             m_contrastLabel{nullptr}; // Label para mostrar valor do contraste
+    QSlider*            m_brightnessSlider{nullptr}; // Slider para ajuste
+    QSlider*            m_contrastSlider{nullptr};
+    QLabel*             m_brightnessLabel{nullptr}; // Label para mostrar valor 
+    QLabel*             m_contrastLabel{nullptr};
+
+    double factorZoom{1.0};
 
 };

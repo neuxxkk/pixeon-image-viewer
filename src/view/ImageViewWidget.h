@@ -1,18 +1,36 @@
 #pragma once
 #include <QWidget>
 
-
-class ImageModel;
+class ImageCollection;  // <- se já migrou para coleção
 
 class ImageViewWidget : public QWidget {
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
-    explicit ImageViewWidget(ImageModel* model, QWidget* parent = nullptr);
+    explicit ImageViewWidget(ImageCollection* collection, QWidget* parent = nullptr);
+    void resetView();
+    void setZoomSensitivity(double factor) { m_zoomSensitivity = 1200.0 / factor; }
+
+signals:
+    void brightnessChangedByDrag(int delta);
+    void contrastChangedByDrag(int delta);
 
 protected:
-    void paintEvent(QPaintEvent* event) override; // Sobrescreve o método
+    void paintEvent(QPaintEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void wheelEvent(QWheelEvent* event) override;
 
 private:
-    ImageModel* m_model;
+    enum class DragMode { None, Panning, AdjustingImage };
+
+    ImageCollection* m_collection;
+
+    double   m_zoomFactor{1.0};
+    QPointF  m_panOffset{0.0, 0.0};
+    double   m_zoomSensitivity{1200.0};
+
+    QPoint   m_lastMousePos;
+    DragMode m_dragMode{DragMode::None};
 };
