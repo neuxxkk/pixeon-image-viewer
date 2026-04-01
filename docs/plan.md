@@ -128,9 +128,9 @@ void MainWindow::onOpenFile() {
 
 O algoritmo deve rodar em CPU de forma eficiente pixel a pixel. Use uma **lookup table (LUT)** — é a técnica profissional e demonstra conhecimento de performance.
 
-- [ ] Implementar `ImageProcessor::applyBrightnessContrast()` com LUT
-- [ ] Conectar os dois `QSlider` ao modelo via signals/slots
-- [ ] Garantir que os sliders ficam desabilitados sem imagem aberta (req. 4a)
+- [x] Implementar `ImageProcessor::applyBrightnessContrast()` com LUT
+- [x] Conectar os dois `QSlider` ao modelo via signals/slots
+- [x] Garantir que os sliders ficam desabilitados sem imagem aberta (req. 4a)
 
 ```cpp
 // controller/ImageProcessor.cpp
@@ -176,9 +176,9 @@ Escolha os bônus com melhor custo-benefício. Recomendo esta ordem:
 
 #### Bônus 4c — Arrastar mouse para brilho/contraste (ALTO impacto, BAIXO custo)
 
-- [ ] Sobrescrever `mousePressEvent`, `mouseMoveEvent`, `mouseReleaseEvent` em `ImageViewWidget`
-- [ ] Movimento horizontal → brilho; vertical → contraste
-- [ ] Emitir sinais que atualizam os sliders
+- [x] Sobrescrever `mousePressEvent`, `mouseMoveEvent`, `mouseReleaseEvent` em `ImageViewWidget`
+- [x] Movimento horizontal → brilho; vertical → contraste
+- [x] Emitir sinais que atualizam os sliders
 
 ```cpp
 // view/ImageViewWidget.cpp
@@ -203,9 +203,9 @@ void ImageViewWidget::mouseMoveEvent(QMouseEvent* event) {
 
 #### Bônus 6a/6b — Zoom e Pan (MÉDIO impacto, MÉDIO custo)
 
-- [ ] Adicionar `m_zoomFactor` e `m_panOffset` ao `ImageViewWidget`
-- [ ] Zoom com scroll do mouse (`wheelEvent`)
-- [ ] Pan com botão direito pressionado + arrastar
+- [X] Adicionar `m_zoomFactor` e `m_panOffset` ao `ImageViewWidget`
+- [X] Zoom com scroll do mouse (`wheelEvent`)
+- [X] Pan com botão direito pressionado + arrastar
 
 ```cpp
 void ImageViewWidget::wheelEvent(QWheelEvent* event) {
@@ -225,9 +225,9 @@ void ImageViewWidget::paintEvent(QPaintEvent*) {
 
 #### Bônus 5 — Múltiplas imagens (BAIXO custo com a arquitetura certa)
 
-- [ ] Usar `QListWidget` lateral com miniaturas
-- [ ] `ImageModel` vira uma coleção: `std::vector<ImageModel>`
-- [ ] Seleção na lista troca a imagem exibida
+- [x] Usar `QListWidget` lateral com miniaturas
+- [x] `ImageModel` vira uma coleção: `std::vector<ImageModel>`
+- [x] Seleção na lista troca a imagem exibida
 
 ---
 
