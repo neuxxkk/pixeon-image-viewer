@@ -1,11 +1,15 @@
 set(SOURCES 
     main.cpp
+    model/ImageModel.h
+    model/ImageModel.cpp
+    model/ImageCollection.h
+    model/ImageCollection.cpp
     view/MainWindow.h
     view/MainWindow.cpp
     view/ImageViewWidget.h
     view/ImageViewWidget.cpp
-    model/ImageModel.h
-    model/ImageModel.cpp
+    controller/ImageProcessor.h
+    controller/ImageProcessor.cpp
 )
 
 

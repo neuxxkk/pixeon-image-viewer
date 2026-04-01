@@ -1,29 +1,38 @@
-# pragma once
+#pragma once
 #include <QImage>
-#include <optional>
 #include <QString>
+#include <optional>
 
 class ImageModel {
 public:
-    // Setter e getter para carregar imagem, brilho e contraste
-    bool loadImage(const QString& filePath); // & = pass by reference
+    // Carregamento
+    bool loadImage(const QString& filePath);
+    void clear();
 
-    bool isLoaded() const {return m_original.has_value();}
+    // Consultas de estado
+    bool isLoaded() const { return m_original.has_value(); }
+    QString filePath() const { return m_filePath; }
 
-    const QImage& original() const {return m_original.value();}
-    const QImage& processed() const {return m_processed;}   
+    // Acesso às imagens
+    // original(): a imagem como saiu do disco, nunca modificada
+    // processed(): resultado após aplicar brilho/contraste
+    const QImage& original()  const { return m_original.value(); }
+    const QImage& processed() const { return m_processed; }
 
-    void setBrightness(int value);
-    void setContrast(int value);
-    int brightness() const {return m_brightness;}
-    int contrast() const {return m_contrast;}
+    // Escrita de processed() — chamado pelo Controller após processar
+    // O Model não sabe como a imagem foi processada, só armazena
+    void setProcessed(const QImage& img) { m_processed = img; }
 
-private:    
-    void applyAdjustments(); // Recalcula a imagem processada com base na original, brilho e contraste
+    // getters & setters
+    int  brightness() const { return m_brightness; }
+    int  contrast()   const { return m_contrast; }
+    void setBrightness(int value) { m_brightness = value; }
+    void setContrast(int value)   { m_contrast   = value; }
 
-    std::optional<QImage> m_original; // std::optional para lidar com ausência de imagem
-    QImage m_processed; // Imagem ajustada
-
-    int m_brightness{0}; // Brilho padrão
-    int m_contrast {0}; // Contraste padrão
+private:
+    std::optional<QImage> m_original;
+    QImage   m_processed;
+    QString  m_filePath;
+    int      m_brightness{0};
+    int      m_contrast{0};
 };
