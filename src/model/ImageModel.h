@@ -27,9 +27,11 @@ public:
     int  brightness() const { return m_brightness; }
     int  contrast()   const { return m_contrast; }
     int  rotation()   const { return m_rotation; }
+    bool isInverted() const { return m_inverted; }
     void setBrightness(int value) { m_brightness = value; }
     void setContrast(int value)   { m_contrast   = value; }
     void setRotation(int value)   { m_rotation   = value; }
+    void setInverted(bool value)  { m_inverted   = value; }
 
 private:
     std::optional<QImage> m_original;
@@ -38,4 +40,5 @@ private:
     int      m_brightness{0};
     int      m_contrast{0};
     int      m_rotation{0};
+    bool     m_inverted{false};
 };

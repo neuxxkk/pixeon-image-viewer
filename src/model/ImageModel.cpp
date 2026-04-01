@@ -11,6 +11,7 @@ bool ImageModel::loadImage(const QString& filePath) {
     m_brightness = 0;
     m_contrast   = 0;
     m_rotation   = 0;
+    m_inverted   = false;
 
     return true;
 }
@@ -22,4 +23,5 @@ void ImageModel::clear() {
     m_brightness = 0;
     m_contrast   = 0;
     m_rotation   = 0;
+    m_inverted   = false;
 }

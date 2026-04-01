@@ -49,6 +49,16 @@ private slots:
         QCOMPARE(rotated180.height(), 200);
     }
 
+    void testInvert() {
+        QImage img(10, 10, QImage::Format_RGB32);
+        img.fill(Qt::black); // 0,0,0
+
+        QImage inverted = ImageProcessor::invert(img);
+        QCOMPARE(qRed(inverted.pixel(0, 0)), 255);
+        QCOMPARE(qGreen(inverted.pixel(0, 0)), 255);
+        QCOMPARE(qBlue(inverted.pixel(0, 0)), 255);
+    }
+
     void testImageModel() {
         ImageModel model;
         QCOMPARE(model.isLoaded(), false);

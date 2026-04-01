@@ -40,3 +40,10 @@ QImage ImageProcessor::rotate(const QImage& source, int degrees) {
     transform.rotate(degrees);
     return source.transformed(transform, Qt::SmoothTransformation);
 }
+
+QImage ImageProcessor::invert(const QImage& source) {
+    if (source.isNull()) return source;
+    QImage result = source;
+    result.invertPixels(QImage::InvertRgb);
+    return result;
+}

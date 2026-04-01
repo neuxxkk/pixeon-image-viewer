@@ -17,4 +17,7 @@ public:
 
     // Rotaciona a imagem em múltiplos de 90 graus
     static QImage rotate(const QImage& source, int degrees);
+
+    // Inverte as cores (padrão Raio-X)
+    static QImage invert(const QImage& source);
 };

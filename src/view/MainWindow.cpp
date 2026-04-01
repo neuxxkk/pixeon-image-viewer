@@ -159,7 +159,7 @@ void MainWindow::setupMenus() {
             reprocessImage();
         }
     });
-    rotateLeftAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
+    rotateLeftAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_L));
 
     auto* rotateRightAction = toolMenu->addAction(tr("Rotacionar 90° Direita"), this, [this]() {
         auto* model = m_collection.current();
@@ -168,12 +168,29 @@ void MainWindow::setupMenus() {
             reprocessImage();
         }
     });
-    rotateRightAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+    rotateRightAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_D));
+
+    toolMenu->addSeparator();
+
+    auto* invertAction = toolMenu->addAction(tr("Inverter Cores (Negativo)"), this, [this]() {
+        auto* model = m_collection.current();
+        if (model) {
+            model->setInverted(!model->isInverted());
+            reprocessImage();
+        }
+    });
+    invertAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_I));
+
+    auto* measureAction = toolMenu->addAction(tr("Régua de Medição"), this, [this](bool checked) {
+        m_imageView->setMeasurementMode(checked);
+    });
+    measureAction->setCheckable(true);
+    measureAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_M));
 
     toolMenu->addSeparator();
 
     auto* resetViewAction = toolMenu->addAction(tr("Resetar Zoom/Pan"), m_imageView, &ImageViewWidget::resetView);
-    resetViewAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R)); // Atalho Ctrl+R
+    resetViewAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_R)); // Atalho Ctrl+R
     resetViewAction->setStatusTip(tr("Reseta o zoom e pan para a posição inicial"));
 
     toolMenu->addSeparator();
@@ -326,6 +343,10 @@ void MainWindow::reprocessImage() {
 
     if (model->rotation() != 0) {
         result = ImageProcessor::rotate(result, model->rotation());
+    }
+
+    if (model->isInverted()) {
+        result = ImageProcessor::invert(result);
     }
 
     model->setProcessed(result);

@@ -10,6 +10,8 @@ public:
     explicit ImageViewWidget(ImageCollection* collection, QWidget* parent = nullptr);
     void resetView();
     void setZoomSensitivity(double factor) { m_zoomSensitivity = 1200.0 / factor; }
+    void setMeasurementMode(bool enabled);
+    bool isMeasurementMode() const { return m_measurementMode; }
 
 signals:
     void brightnessChangedByDrag(int delta);
@@ -23,7 +25,7 @@ protected:
     void wheelEvent(QWheelEvent* event) override;
 
 private:
-    enum class DragMode { None, Panning, AdjustingImage };
+    enum class DragMode { None, Panning, AdjustingImage, Measuring };
 
     ImageCollection* m_collection;
 
@@ -33,4 +35,12 @@ private:
 
     QPoint   m_lastMousePos;
     DragMode m_dragMode{DragMode::None};
+
+    bool     m_measurementMode{false};
+    QPointF  m_measureStart;
+    QPointF  m_measureEnd;
+    bool     m_isMeasuring{false};
+
+    // Converte posição do widget para posição na imagem (levando em conta zoom/pan)
+    QPointF mapToImage(const QPointF& widgetPos) const;
 };
