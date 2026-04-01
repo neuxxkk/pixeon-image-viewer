@@ -14,4 +14,7 @@ public:
         int brightness,   // [-100, 100]
         int contrast      // [-100, 100]
     );
+
+    // Rotaciona a imagem em múltiplos de 90 graus
+    static QImage rotate(const QImage& source, int degrees);
 };

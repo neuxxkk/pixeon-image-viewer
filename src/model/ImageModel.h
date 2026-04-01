@@ -26,8 +26,10 @@ public:
     // getters & setters
     int  brightness() const { return m_brightness; }
     int  contrast()   const { return m_contrast; }
+    int  rotation()   const { return m_rotation; }
     void setBrightness(int value) { m_brightness = value; }
     void setContrast(int value)   { m_contrast   = value; }
+    void setRotation(int value)   { m_rotation   = value; }
 
 private:
     std::optional<QImage> m_original;
@@ -35,4 +37,5 @@ private:
     QString  m_filePath;
     int      m_brightness{0};
     int      m_contrast{0};
+    int      m_rotation{0};
 };

@@ -150,8 +150,27 @@ void MainWindow::setupMenus() {
     });
 
 
-    // == Menu de ferramentas ==
     auto* toolMenu = menuBar()->addMenu(tr("&Ferramentas"));
+
+    auto* rotateLeftAction = toolMenu->addAction(tr("Rotacionar 90° Esquerda"), this, [this]() {
+        auto* model = m_collection.current();
+        if (model) {
+            model->setRotation((model->rotation() - 90) % 360);
+            reprocessImage();
+        }
+    });
+    rotateLeftAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
+
+    auto* rotateRightAction = toolMenu->addAction(tr("Rotacionar 90° Direita"), this, [this]() {
+        auto* model = m_collection.current();
+        if (model) {
+            model->setRotation((model->rotation() + 90) % 360);
+            reprocessImage();
+        }
+    });
+    rotateRightAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+
+    toolMenu->addSeparator();
 
     auto* resetViewAction = toolMenu->addAction(tr("Resetar Zoom/Pan"), m_imageView, &ImageViewWidget::resetView);
     resetViewAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R)); // Atalho Ctrl+R
@@ -299,11 +318,15 @@ void MainWindow::reprocessImage() {
 
     // Controller recebe dados do Model, processa, devolve resultado
     // O Model armazena — ninguém quebra a separação de responsabilidades
-    const QImage result = ImageProcessor::applyBrightnessContrast(
+    QImage result = ImageProcessor::applyBrightnessContrast(
         model->original(),     // sempre parte do original, nunca do processed
         model->brightness(),   // parâmetro atual do model
         model->contrast()
     );
+
+    if (model->rotation() != 0) {
+        result = ImageProcessor::rotate(result, model->rotation());
+    }
 
     model->setProcessed(result);
     m_imageView->update(); // avisa o Qt para chamar paintEvent
