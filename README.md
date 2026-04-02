@@ -14,7 +14,7 @@ Visualizador de imagens médicas desenvolvido para o desafio técnico da Pixeon.
 ## Funcionalidades Core
 - **Abertura de Imagens:** Suporte a BMP, PNG e JPEG.
 - **Ajustes de Imagem:** Brilho e Contraste otimizados via Lookup Table (LUT).
-- **Transformações:** Rotação de 90° e Inversão de Cores (Filtro Negativo).
+- **Transformações:** Rotação por slider e Inversão de Cores (Filtro Negativo).
 - **Visualização Interativa:** Zoom (scroll) e Pan (botão direito) suaves.
 - **Ferramenta Médica (Caliper):** Régua de medição calibrada em milímetros (mm).
 - **Múltiplas Imagens:** Gerenciamento de lista de imagens com miniaturas.
