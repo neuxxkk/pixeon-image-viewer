@@ -4,10 +4,12 @@
 #include "../model/ImageModel.h"
 #include "../model/ImageCollection.h"
 #include <QListWidget>
+#include <QSlider>
+#include <QLabel>
+#include <QGroupBox>
+#include <QDockWidget>
 
 class ImageViewWidget;
-class QSlider;
-class QLabel;
 
 class MainWindow : public QMainWindow { // QObject -> QWidget -> QMainWindow
     Q_OBJECT // set(CMAKE_AUTOMOC ON) gera código back para esse sinal
@@ -23,6 +25,8 @@ private slots:
     void onSaveFile(); // opcional, não implementado
     void onBrightnessChanged(int value);
     void onContrastChanged(int value);
+    void onZoomChanged(int value);
+    void onRotationChanged(int value);
     void onImageSelected(int row);
 
 private:
@@ -35,11 +39,24 @@ private:
     QListWidget*     m_imageList{nullptr};
 
     ImageViewWidget*    m_imageView{nullptr}; // Widget para exibir a imagem
-    QSlider*            m_brightnessSlider{nullptr}; // Slider para ajuste
+    
+    // Controles da Barra Lateral
+    QDockWidget*        m_dock{nullptr};     // Dock de Ajustes
+    QDockWidget*        m_listDock{nullptr}; // Dock de Miniaturas
+    
+    QGroupBox*          m_groupBC{nullptr}; // Brilho/Contraste
+    QGroupBox*          m_groupZoom{nullptr};
+    QGroupBox*          m_groupRotate{nullptr};
+
+    QSlider*            m_brightnessSlider{nullptr};
     QSlider*            m_contrastSlider{nullptr};
-    QLabel*             m_brightnessLabel{nullptr}; // Label para mostrar valor 
+    QSlider*            m_zoomSlider{nullptr};
+    QSlider*            m_rotationSlider{nullptr};
+
+    QLabel*             m_brightnessLabel{nullptr};
     QLabel*             m_contrastLabel{nullptr};
+    QLabel*             m_zoomLabel{nullptr};
+    QLabel*             m_rotationLabel{nullptr};
 
     double factorZoom{1.0};
-
 };
