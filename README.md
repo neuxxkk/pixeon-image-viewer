@@ -7,6 +7,7 @@ Visualizador de imagens médicas desenvolvido para o desafio técnico da Pixeon.
 | Versão | Sistema Operacional | Arquivo |
 |--------|---------------------|---------|
 | v1.0   | Windows (x64)       | [PixeonImageViewer-v1.0-Windows.zip](https://github.com/neuxxkk/pixeon-image-viewer/raw/main/PixeonImageViewer-v1.0-Windows.zip) |
+| v1.0   | —                   | [Relatório Técnico.pdf](https://github.com/neuxxkk/pixeon-image-viewer/raw/main/Relat%C3%B3rio%20T%C3%A9cnico.pdf) |
 
 > **Instalação:** Extraia o arquivo `.zip` e execute `PixeonImageViewer.exe`. Nenhuma instalação adicional é necessária.
 
@@ -48,8 +49,6 @@ cd build
 - `Ctrl + O`: Abrir imagem
 - `Ctrl + S`: Salvar imagem
 - `Ctrl + R`: Resetar Zoom/Pan
-- `Ctrl + L`: Rotacionar Esquerda
-- `Ctrl + D`: Rotacionar Direita
 - `Ctrl + I`: Inverter Cores
 - `Ctrl + M`: Ativar/Desativar Régua de Medição
 
