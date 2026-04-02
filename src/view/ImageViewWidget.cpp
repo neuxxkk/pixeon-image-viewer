@@ -3,6 +3,10 @@
 #include "../model/ImageCollection.h"
 #include <QPainter>
 #include <QPaintEvent>
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QColor>
+#include <QPen>
 #include <algorithm>
 #include <cmath>
 
@@ -19,7 +23,12 @@ void ImageViewWidget::paintEvent(QPaintEvent*) {
     auto* model = m_collection->current();
     if (!model || !model->isLoaded()) return;
 
-    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+    // Se o zoom for muito alto, desabilita a suavização para ver os pixels bem definidos
+    if (m_zoomFactor > 10.0) {
+        painter.setRenderHint(QPainter::SmoothPixmapTransform, false);
+    } else {
+        painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    }
 
     const QImage& img = model->processed();
     const QSizeF  widgetSize = size();
@@ -32,6 +41,20 @@ void ImageViewWidget::paintEvent(QPaintEvent*) {
 
     const QPointF imgTopLeft(-img.width()  / 2.0, -img.height() / 2.0);
     painter.drawImage(imgTopLeft, img);
+
+    // Desenha contorno dos pixels em zoom muito alto (> 15x)
+    if (m_zoomFactor > 15.0) {
+        painter.setPen(QPen(QColor(255, 255, 255, 100), 0)); // Pen cosmética (largura 0 sempre 1px no dispositivo)
+        for (int x = 0; x <= img.width(); ++x) {
+            painter.drawLine(imgTopLeft.x() + x, imgTopLeft.y(), 
+                             imgTopLeft.x() + x, imgTopLeft.y() + img.height());
+        }
+        for (int y = 0; y <= img.height(); ++y) {
+            painter.drawLine(imgTopLeft.x(), imgTopLeft.y() + y, 
+                             imgTopLeft.x() + img.width(), imgTopLeft.y() + y);
+        }
+    }
+
     painter.restore();
 
     // Desenha a medição (Caliper) se estiver ativa
@@ -170,6 +193,7 @@ void ImageViewWidget::wheelEvent(QWheelEvent* event) {
 
     m_panOffset = mouseWidget - center - actualFactor * (mouseWidget - center - m_panOffset);
 
+    emit zoomChanged(m_zoomFactor);
     update(); 
     event->accept();
 }
@@ -177,5 +201,12 @@ void ImageViewWidget::wheelEvent(QWheelEvent* event) {
 void ImageViewWidget::resetView() {
     m_zoomFactor = 1.0;
     m_panOffset  = {0.0, 0.0};
+    emit zoomChanged(m_zoomFactor);
+    update();
+}
+
+void ImageViewWidget::setZoom(double factor) {
+    if (qFuzzyCompare(m_zoomFactor, factor)) return;
+    m_zoomFactor = std::clamp(factor, 0.05, 20.0);
     update();
 }

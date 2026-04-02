@@ -1,5 +1,6 @@
 #pragma once
 #include <QWidget>
+#include <QPointF>
 
 class ImageCollection;  // <- se já migrou para coleção
 
@@ -13,9 +14,13 @@ public:
     void setMeasurementMode(bool enabled);
     bool isMeasurementMode() const { return m_measurementMode; }
 
+    double zoomFactor() const { return m_zoomFactor; }
+    void   setZoom(double factor);
+
 signals:
     void brightnessChangedByDrag(int delta);
     void contrastChangedByDrag(int delta);
+    void zoomChanged(double factor);
 
 protected:
     void paintEvent(QPaintEvent* event) override;
