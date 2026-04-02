@@ -1,0 +1,518 @@
+\documentclass[12pt, a4paper]{article}
+
+% --- UNIVERSAL PREAMBLE BLOCK ---
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm, headheight=15pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+
+% Use a high-quality Sans Serif font compatible with pdflatex
+\usepackage[default, osf]{sourcesanspro}
+\usepackage{zi4} % Monospace font (Consolas-like)
+
+% Add because main language is not English
+\usepackage{enumitem}
+\setlist[itemize]{label=-}
+
+% --- Cores ---
+\usepackage[dvipsnames, table]{xcolor}
+\definecolor{pixeon}{RGB}{0, 102, 179}      % azul institucional Pixeon
+\definecolor{codebg}{RGB}{245, 247, 250}
+\definecolor{coderule}{RGB}{200, 210, 225}
+\definecolor{gray80}{RGB}{80, 80, 80}
+
+% --- Tipografia e Layout ---
+\usepackage[expansion=false]{microtype}
+\usepackage{setspace}
+\onehalfspacing
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{4pt}
+
+% --- Cabeçalho / rodapé ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{gray80} Pixeon Image Viewer --- Relatório Técnico}
+\fancyhead[R]{\small\color{gray80} Vitor N. M. da Silva}
+\fancyfoot[C]{\small\color{gray80} \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% --- Seções com cor ---
+\usepackage{titlesec}
+\titleformat{\section}
+  {\large\bfseries\color{pixeon}}
+  {\thesection.}{0.6em}{}[\vspace{-2pt}\color{pixeon}\rule{\linewidth}{0.6pt}]
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{gray80}}
+  {\thesubsection.}{0.5em}{}
+
+% --- Código-fonte ---
+\usepackage{listings}
+\lstset{
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{coderule},
+  framesep=4pt,
+  numbers=left,
+  numberstyle=\tiny\color{gray80},
+  numbersep=8pt,
+  keywordstyle=\color{pixeon}\bfseries,
+  commentstyle=\color{OliveGreen}\itshape,
+  stringstyle=\color{BrickRed},
+  showstringspaces=false,
+  tabsize=4,
+  captionpos=b,
+  language=C++
+}
+
+% --- Tabelas e Matemática ---
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{amsmath}
+
+% --- Caixas (tcolorbox) ---
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+\newtcolorbox{infobox}[1][]{
+  enhanced, breakable,
+  colback=codebg, colframe=pixeon,
+  fonttitle=\bfseries\small,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  #1
+}
+
+% --- Links e PDF metadata (deve ser o último pacote) ---
+\usepackage[
+  colorlinks=true,
+  linkcolor=pixeon,
+  urlcolor=pixeon,
+  citecolor=pixeon,
+  pdftitle={Relatório Técnico — Pixeon Image Viewer},
+  pdfauthor={Vitor Neuenschwander Mendes da Silva},
+  pdfsubject={Desafio Técnico — Analista Desenvolvedor C++},
+  pdfkeywords={Qt, C++17, Processamento de Imagem, MVC, PACS}
+]{hyperref}
+
+% ========================================================================
+\begin{document}
+
+% --- Capa ---
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+
+  {\color{pixeon}\rule{\linewidth}{2pt}}
+  \vspace{0.4cm}
+
+  {\Huge\bfseries\color{pixeon} Pixeon Image Viewer}\\[0.3cm]
+  {\Large\color{gray80} Medical Edition}
+
+  \vspace{0.3cm}
+  {\color{pixeon}\rule{\linewidth}{2pt}}
+
+  \vspace{1.5cm}
+  {\large\bfseries Relatório Técnico}\\[0.2cm]
+  {\normalsize Desafio Técnico --- Analista Desenvolvedor C++ Júnior}
+
+  \vfill
+
+  \begin{tabular}{rl}
+    \textbf{Candidato:}  & Vitor Neuenschwander Mendes da Silva \\[4pt]
+    \textbf{Contato:}    & \href{mailto:vitornms@gmail.com}{vitornms@gmail.com} \\[4pt]
+    \textbf{LinkedIn:}   & \href{https://linkedin.com/in/vitornms}{linkedin.com/in/vitornms} \\[4pt]
+    \textbf{GitHub:}     & \href{https://github.com/neuxxkk}{github.com/neuxxkk} \\[4pt]
+    \textbf{Data:}       & \today
+  \end{tabular}
+
+  \vspace{1.5cm}
+  {\color{pixeon}\rule{\linewidth}{0.8pt}}
+  \vspace{0.2cm}
+  {\small\color{gray80}
+    Tecnologias: C++17 \textbullet{} Qt 6 \textbullet{} CMake \textbullet{} QTest
+  }
+\end{titlepage}
+
+% --- Sumário ---
+\tableofcontents
+\newpage
+
+% ========================================================================
+\section{Introdução}
+
+Este documento descreve as decisões técnicas, metodologia e resultados obtidos
+no desenvolvimento do \textbf{Pixeon Image Viewer}, aplicação desktop de
+visualização e manipulação de imagens médicas desenvolvida como desafio técnico
+para a vaga de Analista Desenvolvedor C++ Júnior na Pixeon.
+
+O projeto evoluiu intencionalmente além dos requisitos mínimos do enunciado,
+incorporando funcionalidades de apoio ao diagnóstico médico, como calibração de
+medições em milímetros e inversão de polaridade radiográfica, refletindo o
+contexto do produto da empresa.
+
+\begin{infobox}[title={Repositório e Executável}]
+  \textbf{Código-fonte:}
+  \url{https://github.com/neuxxkk/pixeon-image-viewer}\\
+  O repositório contém o código-fonte completo, o arquivo de projeto CMake e
+  o executável Windows empacotado com \texttt{windeployqt}.
+\end{infobox}
+
+% ========================================================================
+\section{Metodologia e Arquitetura}
+
+\subsection{Padrão MVC}
+
+O projeto adota o padrão \textbf{Model-View-Controller (MVC)} como espinha
+dorsal da arquitetura, separando claramente as três responsabilidades:
+
+\begin{table}[h!]
+\centering
+\caption{Distribuição de responsabilidades no padrão MVC}
+\vspace{4pt}
+\begin{tabularx}{\linewidth}{>{\bfseries}lX}
+\toprule
+Camada & Responsabilidade \\
+\midrule
+Model \newline
+\texttt{ImageModel}, \texttt{ImageCollection}
+  & Encapsula o estado da imagem (original e processada), parâmetros de
+    ajuste (brilho, contraste, rotação, inversão) e a coleção de imagens
+    abertas simultaneamente. \\
+\addlinespace
+View \newline
+\texttt{MainWindow}, \texttt{ImageViewWidget}
+  & Gerencia a interface gráfica Qt, renderiza a imagem com suporte a
+    zoom, pan e anotações, e exibe a lista lateral de imagens abertas. \\
+\addlinespace
+Controller \newline
+\texttt{ImageProcessor}
+  & Contém algoritmos puros de processamento de imagem, completamente
+    isolados da camada de interface. Facilita testes unitários
+    independentes. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Sistema de Build --- CMake}
+
+Optou-se por \textbf{CMake} em detrimento do \texttt{qmake} por três razões
+objetivas:
+
+\begin{enumerate}
+  \item \textbf{Suporte a IDEs modernas:} integração nativa com VSCode
+        (\textit{CMake Tools}), CLion e Qt Creator 6+.
+  \item \textbf{Separação de targets:} o projeto principal e os testes
+        unitários são targets independentes, compilados e executados
+        separadamente via \texttt{ctest}.
+  \item \textbf{Adoção da indústria:} CMake é o padrão de facto em projetos
+        C++ corporativos modernos.
+\end{enumerate}
+
+\subsection{Linguagem --- C++17}
+
+O padrão C++17 foi escolhido por oferecer ferramentas que tornam o código
+mais seguro e expressivo sem custo de runtime:
+
+\begin{itemize}
+  \item \texttt{std::optional<QImage>} para representar estado ``sem imagem
+        carregada'' de forma type-safe, eliminando sentinelas frágeis como
+        \texttt{QImage()} vazio ou flags booleanas separadas.
+  \item \texttt{std::clamp} para garantir limites de valores sem risco de
+        overflow silencioso.
+  \item \texttt{std::array<uint8\_t, 256>} alocado em stack para a LUT,
+        evitando alocação dinâmica em hot paths.
+  \item \texttt{if constexpr}, structured bindings e deduções de tipo
+        (\texttt{auto}) onde aplicável.
+\end{itemize}
+
+% ========================================================================
+\section{Formatos de Imagem Suportados}
+
+O enunciado solicitava suporte a pelo menos um dos formatos BMP, PNG ou JPEG
+(\textit{bônus} para mais de um). O projeto suporta \textbf{os três formatos},
+sem dependência de bibliotecas externas, pois o Qt 6 os gerencia nativamente
+via \texttt{QImage::load()}.
+
+\begin{table}[h!]
+\centering
+\caption{Formatos de imagem suportados}
+\vspace{4pt}
+\begin{tabular}{lll}
+\toprule
+Formato & Extensões & Característica relevante \\
+\midrule
+BMP  & \texttt{.bmp}              & Sem compressão, leitura trivial \\
+PNG  & \texttt{.png}              & Canal alfa; convertido para RGB32 \\
+JPEG & \texttt{.jpg}, \texttt{.jpeg} & Compressão com perda; mais comum em PACS \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Todas as imagens são convertidas imediatamente para o formato interno
+\texttt{QImage::Format\_RGB32} no momento do carregamento. Isso garante que os
+algoritmos de processamento operem sempre sobre um layout de memória uniforme
+(4 bytes por pixel: R, G, B + padding), independente do formato original.
+
+% ========================================================================
+\section{Técnicas Aplicadas}
+
+\subsection{Lookup Table (LUT) para Brilho e Contraste}
+
+A técnica de \textbf{Lookup Table} é o método profissional para aplicar
+transformações tonais em imagens. A ideia central é:
+
+\begin{infobox}[title={Princípio da LUT}]
+  Em vez de calcular a fórmula de brilho/contraste para cada um dos
+  potencialmente milhões de pixels, calcula-se apenas \textbf{256 vezes}
+  (uma por possível valor de canal 0--255) e armazena-se o resultado em uma
+  tabela. Cada pixel é então transformado por uma simples consulta de índice:
+  $O(1)$ por pixel.
+\end{infobox}
+
+A fórmula aplicada combina contraste e brilho em uma única passagem:
+
+\begin{equation}
+  \text{LUT}[i] = \text{clamp}\!\left(
+    f_c \cdot (i - 128) + 128 + B,\; 0,\; 255
+  \right)
+\end{equation}
+
+onde $f_c = \frac{C + 100}{100}$ é o fator de contraste (intervalo $[0, 2]$)
+e $B \in [-100, 100]$ é o deslocamento de brilho. O \texttt{std::clamp} garante
+que o resultado nunca ultrapasse os limites do tipo \texttt{uint8\_t}, evitando
+overflow silencioso.
+
+O acesso à memória da imagem é feito diretamente via \texttt{scanLine(y)},
+evitando a sobrecarga de chamadas ao método \texttt{pixel(x, y)}:
+
+\begin{lstlisting}[caption={Aplicação da LUT com acesso direto à memória}]
+for (int y = 0; y < h; ++y) {
+    QRgb* line = reinterpret_cast<QRgb*>(m_processed.scanLine(y));
+    for (int x = 0; x < w; ++x) {
+        const QRgb px = line[x];
+        line[x] = qRgb(lut[qRed(px)],
+                       lut[qGreen(px)],
+                       lut[qBlue(px)]);
+    }
+}
+\end{lstlisting}
+
+\subsection{Renderização de Alta Precisão (Pixel-Perfect)}
+
+Para apoiar o diagnóstico médico detalhado, o widget de visualização implementa uma lógica de renderização adaptativa baseada no nível de ampliação:
+
+\begin{itemize}
+  \item \textbf{Zoom < 10$\times$:} utiliza interpolação bilinear (\texttt{Qt::SmoothTransformation}) para suavizar transições e evitar aliasing.
+  \item \textbf{Zoom > 10$\times$:} a suavização é desativada (\texttt{nearest-neighbor}), permitindo que o médico visualize os valores reais dos pixels sem interpolação artificial que poderia mascarar artefatos.
+  \item \textbf{Zoom > 15$\times$:} ativa-se uma \textbf{grade de contorno de pixels}. Utilizando uma \texttt{QPen} cosmética (largura fixa de 1px independente da escala), o sistema desenha bordas translúcidas ao redor de cada pixel, facilitando a contagem e análise de estruturas em nível microscópico.
+\end{itemize}
+
+\subsection{Integração de Controles e MenuUI}
+
+A interface foi reformulada para oferecer flexibilidade total ao usuário, inspirada em estações de trabalho radiológicas (\textit{Workstations}) profissionais:
+
+\begin{itemize}
+    \item \textbf{Agrupamento Funcional:} Os controles na barra lateral são organizados em \texttt{QGroupBox} (Ajustes Tonais, Zoom, Rotação).
+    \item \textbf{Visibilidade Dinâmica:} O menu ``Ferramentas'' permite que o usuário ligue/desligue a exibição de cada grupo individualmente, limpando a interface de elementos desnecessários para o fluxo atual.
+    \item \textbf{Persistência de Visão:} Adição do menu ``Exibir'', que permite reabrir a barra lateral de ajustes caso ela seja fechada acidentalmente, garantindo que o usuário nunca perca o acesso aos controles.
+\end{itemize}
+
+\subsection{Ferramenta Caliper (Régua Médica)}
+
+A régua de medição (\textit{caliper}) é a funcionalidade de maior complexidade
+geométrica do projeto. Ela exige o mapeamento bidirecional entre dois espaços
+de coordenadas:
+
+\begin{itemize}
+  \item \textbf{Coordenadas do widget:} onde o usuário clica com o mouse.
+  \item \textbf{Coordenadas lógicas da imagem:} posição real no pixel original,
+        independente de zoom, pan ou rotação aplicados.
+\end{itemize}
+
+A conversão inversa requer desfazer as transformações acumuladas pelo
+\texttt{QPainter} (translação de pan, escala de zoom, rotação), o que foi
+resolvido através da \textbf{inversa da matriz de transformação} composta:
+
+\begin{equation}
+  \mathbf{p}_{\text{imagem}} = \mathbf{M}^{-1} \cdot \mathbf{p}_{\text{widget}}
+\end{equation}
+
+onde $\mathbf{M} = T_{\text{pan}} \cdot S_{\text{zoom}} \cdot R_{\theta}$.
+
+A medição é exibida em \textbf{milímetros}, utilizando uma calibração simulada
+de $0{,}1\,\text{mm/pixel}$ --- valor representativo de modalidades de imagem
+médica como radiografia digital. Em um sistema PACS real, esse valor seria
+lido diretamente dos metadados DICOM (\textit{Pixel Spacing}).
+
+\subsection{Inversão de Polaridade (Negativo)}
+
+O filtro de inversão ($\text{valor}' = 255 - \text{valor}$) simula a
+visualização de filmes radiográficos tradicionais, onde ossos aparecem escuros
+sobre fundo claro. É implementado via \texttt{QImage::invertPixels()} do Qt,
+operação otimizada internamente pela biblioteca.
+
+% ========================================================================
+\section{Funcionalidades Implementadas}
+
+\subsection{Requisitos Obrigatórios}
+
+\begin{itemize}
+  \item Abertura de imagens via \texttt{QFileDialog} com filtro por extensão.
+  \item Suporte a BMP, PNG e JPEG.
+  \item Exibição centralizada da imagem com fundo preto.
+  \item Controle de brilho via \texttt{QSlider} (intervalo $[-100, 100]$).
+  \item Controle de contraste via \texttt{QSlider} (intervalo $[-100, 100]$).
+  \item Sliders desabilitados enquanto nenhuma imagem estiver aberta.
+\end{itemize}
+
+\subsection{Funcionalidades Bônus}
+
+\begin{itemize}
+  \item \textbf{Bônus 4c --- Drag do mouse:} arrastar horizontalmente altera
+        o brilho; verticalmente, o contraste. Os sliders são atualizados
+        em tempo real.
+  \item \textbf{Bônus 5 --- Múltiplas imagens:} lista lateral com miniaturas;
+        seleção troca a imagem exibida sem fechar as demais.
+  \item \textbf{Bônus 6a --- Zoom:} scroll do mouse com interpolação bilinear e centralizando imagem com pan.
+  \item \textbf{Bônus 6b --- Pan:} arrasto com botão direito; imagem retorna ao
+        centro com duplo clique.
+  \item \textbf{Bônus 6c --- Rotação:} controle de rotação em 90° e ângulo
+        livre por slider.
+  \item \textbf{Bônus 7 --- Surpresa:} Ferramenta Caliper (régua calibrada em
+        mm) e inversão de polaridade radiográfica.
+\end{itemize}
+
+% ========================================================================
+\section{Testes Unitários}
+
+Os testes foram implementados com o framework \textbf{Qt Test (QTest)},
+incluído nativamente no Qt 6, dispensando dependências externas. Cada caso de
+teste é um método de slot privado da classe de teste:
+
+\begin{table}[h!]
+\centering
+\caption{Casos de teste implementados}
+\vspace{4pt}
+\begin{tabularx}{\linewidth}{lX}
+\toprule
+Caso de teste & O que verifica \\
+\midrule
+\texttt{testNeutralAdjustment}
+  & Brilho $= 0$, contraste $= 0$ retorna imagem bitwise-idêntica à original. \\
+\texttt{testBrightnessClamp}
+  & Brilho $= +100$ em pixel $(250, 250, 250)$ resulta em $(255, 255, 255)$;
+    sem overflow. \\
+\texttt{testNegativeBrightness}
+  & Brilho $= -100$ em pixel $(10, 10, 10)$ resulta em $(0, 0, 0)$;
+    sem underflow. \\
+\texttt{testContrastMidpoint}
+  & Pixel exato em $128$ permanece $128$ para qualquer fator de contraste. \\
+\texttt{testLoadInvalidFile}
+  & \texttt{loadFromFile()} retorna \texttt{false} e
+    \texttt{isLoaded()} permanece \texttt{false} com caminho inválido. \\
+\texttt{testLoadValidFile}
+  & \texttt{loadFromFile()} retorna \texttt{true} e imagem tem dimensões
+    corretas com arquivo PNG válido. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Os testes são executados via \texttt{ctest} a partir do diretório de build:
+
+\begin{lstlisting}[language=bash, caption={Execução dos testes}]
+cd build && ctest --output-on-failure
+\end{lstlisting}
+
+% ========================================================================
+\section{Dificuldades Encontradas}
+
+\subsection{LUT com Canal Separado e Overflow}
+
+A principal dificuldade técnica foi garantir que a LUT tratasse cada canal RGB
+de forma independente, sem que a transformação de contraste --- centralizada
+em 128 e de natureza não-linear --- interagisse incorretamente com o
+deslocamento de brilho. O risco concreto era um \textbf{overflow silencioso}
+ao fazer \texttt{static\_cast<uint8\_t>} em valores fora do intervalo
+$[0, 255]$, que em C++ é comportamento indefinido para inteiros com sinal. A
+solução foi aplicar \texttt{std::clamp} sobre o tipo \texttt{double} antes da
+conversão, garantindo sempre um valor seguro.
+
+\subsection{Gestão de Coordenadas Multi-Transformação}
+
+Converter a posição do clique do mouse (espaço do widget) para a coordenada
+real na imagem original, após zoom, pan e rotação acumulados, exigiu a
+\textbf{inversão da matriz de transformação composta} do \texttt{QPainter}. O
+Qt disponibiliza \texttt{QTransform::inverted()}, mas a construção manual da
+composição correta de transformações (ordem importa: rotação antes de escala
+antes de translação) demandou atenção especial para a ferramenta caliper
+funcionar com precisão.
+
+\subsection{Interpolação Adaptativa no Zoom}
+
+Inicialmente, a imagem era sempre escalada com \texttt{SmoothTransformation},
+o que borrava os pixels ao ampliar. A solução foi alternar para
+\texttt{FastTransformation} (nearest-neighbor) quando o zoom ultrapassa $1\times$,
+e adicionar a grade de pixels a partir de $8\times$, replicando o comportamento
+de editores profissionais como o GIMP.
+
+% ========================================================================
+\section{Possíveis Melhorias Futuras}
+
+\begin{enumerate}
+  \item \textbf{Processamento em GPU via OpenGL.} Migrar os filtros de
+        brilho/contraste para \textit{shaders} GLSL utilizando
+        \texttt{QOpenGLWidget}, eliminando a latência CPU para imagens de
+        alta resolução (ex.: radiografias $4096 \times 4096$).
+
+  \item \textbf{Suporte nativo a DICOM via DCMTK.} Integrar a biblioteca
+        \href{https://dicom.offis.de/dcmtk}{DCMTK} para leitura de metadados
+        reais de calibração (\textit{Pixel Spacing}), eliminando a calibração
+        simulada atual e tornando as medições do caliper clinicamente válidas.
+
+  \item \textbf{Janelamento (\textit{Windowing}).} Implementar controles de
+        \textit{Window Level / Window Width} para imagens de 12-bit ou 16-bit,
+        padrão em Tomografia Computadorizada e Ressonância Magnética.
+
+  \item \textbf{Processamento assíncrono.} Mover a aplicação da LUT para uma
+        thread separada via \texttt{QtConcurrent::run}, mantendo a interface
+        responsiva em imagens grandes.
+
+  \item \textbf{Filtros convolucionais.} Adicionar filtros como
+        \textit{sharpening}, suavização gaussiana e detecção de bordas
+        (Sobel/Canny) via \texttt{std::array} de kernels aplicados com
+        \texttt{QImage}.
+\end{enumerate}
+
+% ========================================================================
+\section{Avaliação do Resultado}
+
+O projeto entregou todos os requisitos obrigatórios e todos os bônus
+especificados no enunciado, acrescido da funcionalidade extra de caliper
+médico. A arquitetura MVC adotada manteve o código testável e extensível: o
+\texttt{ImageProcessor} não tem dependência alguma de Qt Widgets, podendo ser
+testado em isolamento completo.
+
+A decisão de implementar funcionalidades orientadas ao domínio médico ---
+calibração em mm, inversão de polaridade, interpolação adaptativa para
+diagnóstico --- foi deliberada: demonstra compreensão do contexto de negócio
+da Pixeon (PACS, imagens médicas, DICOM) e da responsabilidade que esse
+software carrega para profissionais de saúde.
+
+Do ponto de vista pessoal, a maior evolução foi a gestão de coordenadas
+multi-transformação para o caliper, que exigiu revisitar álgebra linear
+aplicada --- um domínio fora da zona de conforto inicial, mas essencial para
+ferramentas de medição precisas em ambiente clínico.
+
+\begin{infobox}[title={Consideração Final}]
+  Em um contexto de imagens médicas como DICOM, o pipeline de processamento
+  implementado --- LUT de 256 entradas, acesso direto a \texttt{scanLine},
+  interpolação adaptativa --- pode ser expandido para suportar imagens de
+  16 bits e metadados DICOM reais, garantindo fidelidade diagnóstica sem
+  comprometer a performance.
+\end{infobox}
+
+% --- Fim do documento ---
+\end{document}
