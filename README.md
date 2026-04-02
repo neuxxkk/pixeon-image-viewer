@@ -11,7 +11,7 @@ Visualizador de imagens médicas desenvolvido para o desafio técnico da Pixeon.
 - **Múltiplas Imagens:** Gerenciamento de lista de imagens com miniaturas.
 
 ## Requisitos
-- **Qt 6.x** (Core, Gui, Widgets, Test)
+- **Qt 6** (Core, Gui, Widgets, Test)
 - **CMake 3.16+**
 - **Compilador C++17** (GCC, Clang ou MSVC)
 
