@@ -2,6 +2,14 @@
 
 Visualizador de imagens médicas desenvolvido para o desafio técnico da Pixeon. O projeto utiliza C++17 e Qt 6, seguindo a arquitetura MVC.
 
+## Download
+
+| Versão | Sistema Operacional | Arquivo |
+|--------|---------------------|---------|
+| v1.0   | Windows (x64)       | [PixeonImageViewer-v1.0-Windows.zip](https://github.com/neuxxkk/pixeon-image-viewer/raw/main/PixeonImageViewer-v1.0-Windows.zip) |
+
+> **Instalação:** Extraia o arquivo `.zip` e execute `PixeonImageViewer.exe`. Nenhuma instalação adicional é necessária.
+
 ## Funcionalidades Core
 - **Abertura de Imagens:** Suporte a BMP, PNG e JPEG.
 - **Ajustes de Imagem:** Brilho e Contraste otimizados via Lookup Table (LUT).
