@@ -6,6 +6,8 @@ int main(int argc, char* argv[]) {
     app.setApplicationName("Pixeon Image Viewer");
     app.setApplicationVersion("1.0");
 
+    app.setWindowIcon(QIcon(":/app_icon.png"));
+
     MainWindow window;
     window.show();
 

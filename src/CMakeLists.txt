@@ -13,7 +13,14 @@ set(SOURCES
 )
 
 
-qt_add_executable(PixeonImageViewer ${SOURCES})
+qt_add_executable(PixeonImageViewer
+    ${SOURCES}
+    ../resources/resources.qrc
+)
+
+if(WIN32)
+    target_sources(PixeonImageViewer PRIVATE ../resources/app.rc)
+endif()
 
 target_link_libraries(PixeonImageViewer
     PRIVATE
