@@ -116,7 +116,8 @@
 
   \vspace{1.5cm}
   {\large\bfseries Relatório Técnico}\\[0.2cm]
-  {\normalsize Desafio Técnico --- Analista Desenvolvedor C++ Júnior}
+  {\normalsize Desafio Técnico --- Analista Desenvolvedor C++ Júnior}\\
+  {\normalsize \textbf{Código fonte: }\href{https://github.com/neuxxkk/pixeon-image-viewer}{ neuxxkk/pixeon-image-viewer} }
 
   \vfill
 
@@ -176,18 +177,19 @@ dorsal da arquitetura, separando claramente as três responsabilidades:
 \toprule
 Camada & Responsabilidade \\
 \midrule
-Model \newline
+Model 
+\\
 \texttt{ImageModel}, \texttt{ImageCollection}
   & Encapsula o estado da imagem (original e processada), parâmetros de
     ajuste (brilho, contraste, rotação, inversão) e a coleção de imagens
     abertas simultaneamente. \\
 \addlinespace
-View \newline
+View \\
 \texttt{MainWindow}, \texttt{ImageViewWidget}
   & Gerencia a interface gráfica Qt, renderiza a imagem com suporte a
     zoom, pan e anotações, e exibe a lista lateral de imagens abertas. \\
 \addlinespace
-Controller \newline
+Controller \\
 \texttt{ImageProcessor}
   & Contém algoritmos puros de processamento de imagem, completamente
     isolados da camada de interface. Facilita testes unitários

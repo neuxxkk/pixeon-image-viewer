@@ -6,3 +6,4 @@ moc_*
 qrc_*
 ui_*
 backlog.md
+.qtcreator/
