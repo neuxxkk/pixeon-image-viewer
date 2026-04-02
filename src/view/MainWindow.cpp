@@ -139,7 +139,7 @@ void MainWindow::setupMenus() {
 
     fileMenu->addSeparator();
 
-    auto* aboutAction = fileMenu->addAction(tr("Sobre"), this, []() {
+    fileMenu->addAction(tr("Sobre"), this, []() {
         QMessageBox::information(
             nullptr,
             tr("Sobre o Pixeon Image Viewer"),
@@ -152,34 +152,31 @@ void MainWindow::setupMenus() {
 
     auto* toolMenu = menuBar()->addMenu(tr("&Ferramentas"));
 
-    auto* rotateLeftAction = toolMenu->addAction(tr("Rotacionar 90° Esquerda"), this, [this]() {
+    toolMenu->addAction(tr("Rotacionar 90° Esquerda"), this, [this]() {
         auto* model = m_collection.current();
         if (model) {
             model->setRotation((model->rotation() - 90) % 360);
             reprocessImage();
         }
-    });
-    rotateLeftAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_L));
+    })->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_L));
 
-    auto* rotateRightAction = toolMenu->addAction(tr("Rotacionar 90° Direita"), this, [this]() {
+    toolMenu->addAction(tr("Rotacionar 90° Direita"), this, [this]() {
         auto* model = m_collection.current();
         if (model) {
             model->setRotation((model->rotation() + 90) % 360);
             reprocessImage();
         }
-    });
-    rotateRightAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_D));
+    })->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_D));
 
     toolMenu->addSeparator();
 
-    auto* invertAction = toolMenu->addAction(tr("Inverter Cores (Negativo)"), this, [this]() {
+    toolMenu->addAction(tr("Inverter Cores (Negativo)"), this, [this]() {
         auto* model = m_collection.current();
         if (model) {
             model->setInverted(!model->isInverted());
             reprocessImage();
         }
-    });
-    invertAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_I));
+    })->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_I));
 
     auto* measureAction = toolMenu->addAction(tr("Régua de Medição"), this, [this](bool checked) {
         m_imageView->setMeasurementMode(checked);
@@ -195,7 +192,7 @@ void MainWindow::setupMenus() {
 
     toolMenu->addSeparator();
 
-    auto* changeZoomSensibilityAction = toolMenu->addAction(tr("Ajustar Sensibilidade do Zoom"), this, [this]() {
+    toolMenu->addAction(tr("Ajustar Sensibilidade do Zoom"), this, [this]() {
         bool ok;
         factorZoom = QInputDialog::getDouble(
             nullptr,
